@@ -35,6 +35,12 @@ Content-length: 78
 {
     "data": "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw=="
 }
+
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+
+{"success":true}
 ```
 
 **A note about JSON-Base64**

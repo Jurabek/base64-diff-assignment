@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <None Include="wwwroot\index.html" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
   <ItemGroup>
