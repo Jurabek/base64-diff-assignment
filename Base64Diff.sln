@@ -16,6 +16,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Base64Diff.DomainTests", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Base64Diff.IntegrationTests", "test\integration\Base64Diff.IntegrationTests.csproj", "{5FAFE0C7-A612-418E-9839-A38205394B1F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotfiles", "dotfiles", "{974BC99A-8B22-4CA6-B671-523A8B3A1795}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		doc\assignment.md = doc\assignment.md
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
