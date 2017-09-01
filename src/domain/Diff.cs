@@ -11,7 +11,7 @@ namespace Base64Diff.Domain
         readonly byte[] _left;
         readonly byte[] _right;
         readonly DiffStatus _status;
-        readonly List<(int, int)> _differences = new List<(int, int)>();
+        readonly List<Difference> _differences = new List<Difference>();
 
         /// <summary>
         /// The binary data on the left part of the diff.
@@ -29,10 +29,10 @@ namespace Base64Diff.Domain
         public DiffStatus Status => _status;
 
         /// <summary>
-        /// A <see cref="IReadOnlyList{ValueTuple{int, int}}" /> containing the differences (Offset and Length) of
+        /// A <see cref="IReadOnlyList{Difference}" /> containing the differences (Offset and Length) of
         /// the <see cref="Right"/> part in relation to the <see cref="Left"/> part of the diff, if any.
         /// </summary>
-        public IReadOnlyList<(int Offset, int Length)> Differences => _differences;
+        public IReadOnlyList<Difference> Differences => _differences;
 
         /// <summary>
         /// Private constructor, creates an immutable Diff from scratch.
@@ -52,9 +52,9 @@ namespace Base64Diff.Domain
         /// <param name="left">The <see cref="Left" /> part of the diff</param>
         /// <param name="right">The <see cref="Right" /> part of the diff</param>
         /// <returns>A tuple containing the <see cref="Status"/> and <see cref="Differences" /> between the two parts.</returns>
-        static (DiffStatus status, List<(int, int)> differences) ExtractDifferences(byte[] left, byte[] right)
+        static (DiffStatus status, List<Difference> differences) ExtractDifferences(byte[] left, byte[] right)
         {
-            var differences = new List<(int, int)>();
+            var differences = new List<Difference>();
             if (left.Length != right.Length)
                 return (DiffStatus.DifferentLength, differences);
             int lastDifference = -1;
@@ -66,12 +66,12 @@ namespace Base64Diff.Domain
                 }
                 else if (lastDifference > -1 && left[i] == right[i])
                 {
-                    differences.Add((lastDifference, i - lastDifference));
+                    differences.Add(new Difference(lastDifference, i - lastDifference));
                     lastDifference = -1;
                 }
             }
             if (lastDifference > -1)
-                differences.Add((lastDifference, left.Length - lastDifference));
+                differences.Add(new Difference(lastDifference, left.Length - lastDifference));
             var status = differences.Count == 0 ? DiffStatus.SameContent : DiffStatus.DifferentContent;
             return (status, differences);
         }

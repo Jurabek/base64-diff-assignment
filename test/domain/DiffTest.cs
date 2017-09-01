@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Base64Diff.Domain
@@ -14,7 +15,9 @@ namespace Base64Diff.Domain
             Assert.AreEqual(leftLength, diff.Left.Length);
             Assert.AreEqual(rightLength, diff.Right.Length);
             Assert.AreEqual(status, diff.Status);
-            CollectionAssert.AreEqual(differences, diff.Differences);
+            Assert.AreEqual(differences.Length, diff.Differences.Count);
+            var differencesTuples = diff.Differences.Select(d => (d.Offset, d.Length));
+            CollectionAssert.AreEqual(differences, differencesTuples);
         }
 
         [Test]
