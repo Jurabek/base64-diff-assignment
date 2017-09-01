@@ -7,3 +7,13 @@
 # Build artifacts
 bin/
 obj/
+
+# Test results
+TestResults/
+
+# Visual Studio local files
+.vs/
+
+# NCrunch
+*.ncrunch*
+_NCrunch_*/
