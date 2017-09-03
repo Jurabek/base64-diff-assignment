@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
   <head>
@@ -41,7 +41,6 @@
       ----------------------------------------
       PUT /v1/diff/1/left HTTP/1.0
       Content-type: application/json
-      Content-length: 78
 
       {
           "data": "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw=="
@@ -51,7 +50,7 @@
       Connection: close
       Content-Type: application/json; charset=utf-8
 
-      {"success": true}
+      {"success":true}
       -----------------------------------------
 
 
@@ -64,7 +63,7 @@
       Connection: close
       Content-Type: application/json; charset=utf-8
 
-      {"diff": "different-lengths"}
+      {"diff":"different-lengths","differences":[]}
       -----------------------------------------
 
 
@@ -72,7 +71,6 @@
       ----------------------------------------
       PUT /v1/diff/1/right HTTP/1.0
       Content-type: application/json
-      Content-length: 78
 
       {
           "data": "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw=="
@@ -82,7 +80,7 @@
       Connection: close
       Content-Type: application/json; charset=utf-8
 
-      {"success": true}
+      {"success":true}
       -----------------------------------------
 
 
@@ -95,7 +93,7 @@
       Connection: close
       Content-Type: application/json; charset=utf-8
 
-      {"diff": "same-content"}
+      {"diff":"same-content","differences":[]}
       -----------------------------------------
 
 
@@ -103,7 +101,6 @@
       ----------------------------------------
       PUT /v1/diff/1/right HTTP/1.0
       Content-type: application/json
-      Content-length: 78
 
       {
           "data": "VGhlIGxhenkgYnJvd24gZm94IGp1bXBzIG92ZXIgdGhlIHF1aWNrIGRvZw=="
@@ -113,7 +110,7 @@
       Connection: close
       Content-Type: application/json; charset=utf-8
 
-      {"success": true}
+      {"success":true}
       -----------------------------------------
 
 
@@ -126,7 +123,22 @@
       Connection: close
       Content-Type: application/json; charset=utf-8
 
-      {"diff": "has-differences", "differences": [{"offset":4,"length":35}]}
+      {"diff":"different-content","differences":[{"offset":4,"length":35}]}
+      -----------------------------------------
+
+
+      8. And what if I send invalid data?
+      ----------------------------------------
+      PUT /v1/diff/1/right HTTP/1.0
+      Content-type: application/json
+
+      {"data":"this_is_not_a_base64_string!"}
+
+      HTTP/1.1 422 Unprocessable Entity
+      Connection: close
+      Content-Type: application/json; charset=utf-8
+
+      {"error":"Malformed Base64 string data"}
       -----------------------------------------
 
 

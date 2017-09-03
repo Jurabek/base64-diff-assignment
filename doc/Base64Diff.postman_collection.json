@@ -1,0 +1,526 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Base64Diff tests",
+		"_postman_id": "1dc29b94-1594-a129-93f8-acbec7af00e4",
+		"description": "Tests for the Base64 Diffing service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Single-part diffs",
+			"description": "Tests with diffs that have only one part set",
+			"item": [
+				{
+					"name": "SetLeft",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Response body indicates success\"] = JSON.parse(responseBody).success;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/101001/left",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"data\": \"VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==\"\n}"
+						},
+						"description": "Sets the left part of a diff to the string: \"The quick brown fox jumps over the lazy dog\"."
+					},
+					"response": []
+				},
+				{
+					"name": "SetRight",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Response body indicates success\"] = JSON.parse(responseBody).success;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/101002/right",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"data\": \"VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==\"\n}"
+						},
+						"description": "Sets the right part of a diff to the string: \"The quick brown fox jumps over the lazy dog\"."
+					},
+					"response": []
+				},
+				{
+					"name": "Get diff with only left part",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Diff status is 'different-lengths'\"] = JSON.parse(responseBody).status === 'different-lengths';",
+									"tests[\"Diff contains no differences\"] = JSON.parse(responseBody).differences.length === 0;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/101001",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Retrieves the diff and checks that it indicates \"different-lengths\", since the right part hasn't been set yet."
+					},
+					"response": []
+				},
+				{
+					"name": "Get diff with only right part",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Diff status is 'different-lengths'\"] = JSON.parse(responseBody).status === 'different-lengths';",
+									"tests[\"Diff contains no differences\"] = JSON.parse(responseBody).differences.length === 0;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/101002",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Retrieves the diff and checks that it indicates \"different-lengths\", since the left part hasn't been set yet."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Utilities",
+			"description": "Tests that use the API utilities",
+			"item": [
+				{
+					"name": "API Usage (home page)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is html\"] = postman.getResponseHeader(\"Content-Type\") === 'text/html';",
+									"tests[\"Response body contains usage instructions\"] = responseBody.has(\"The following endpoints are available:\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Requests the home page endpoint of the API and verifies that it returns a HTML file containing usage examples."
+					},
+					"response": []
+				},
+				{
+					"name": "Service Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is plain text\"] = postman.getResponseHeader(\"Content-Type\") === 'text/plain; charset=utf-8';",
+									"tests[\"Response body is just the string 'OK'\"] = responseBody === \"OK\";",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/status",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Requests the service status endpoint of the API and verifies that it returns the 'OK' message."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Error responses",
+			"description": "Tests that send invalid requests",
+			"item": [
+				{
+					"name": "Diff Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 404 Not Found\"] = responseCode.code === 404;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/-123123",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Requests the diff of a previously unused ID and verifies that it receives a 404 Not found response."
+					},
+					"response": []
+				},
+				{
+					"name": "SetLeft with invalid string",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 422 Unprocessable Entity\"] = responseCode.code === 422;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Response body indicates error\"] = JSON.parse(responseBody).error === 'Malformed Base64 string data';",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/505002/left",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"data\":\"this_is_not_a_base64_string!\"}"
+						},
+						"description": "Sets the left part of a diff to an invalid Base64 string and verifies that it receives an error response."
+					},
+					"response": []
+				},
+				{
+					"name": "SetRight with invalid string",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 422 Unprocessable Entity\"] = responseCode.code === 422;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Response body indicates error\"] = JSON.parse(responseBody).error === 'Malformed Base64 string data';",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/505003/right",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"data\":\"this_is_not_a_base64_string!\"}"
+						},
+						"description": "Sets the right part of a diff to an invalid Base64 string and verifies that it receives an error response."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Multi-part diffs",
+			"description": "Tests with diffs that have both parts set",
+			"item": [
+				{
+					"name": "SetLeft different content",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Response body indicates success\"] = JSON.parse(responseBody).success;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/301001/left",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"data\": \"VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==\"\n}"
+						},
+						"description": "Sets the left part of a diff to the string: \"The quick brown fox jumps over the lazy dog\"."
+					},
+					"response": []
+				},
+				{
+					"name": "SetRight different content",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Response body indicates success\"] = JSON.parse(responseBody).success;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/301001/right",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"data\": \"VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGNhdA==\"\n}"
+						},
+						"description": "Sets the right part of a diff to the string: \"The quick brown fox jumps over the lazy cat\"."
+					},
+					"response": []
+				},
+				{
+					"name": "Get diff with different content",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"response = JSON.parse(responseBody);",
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Diff status is 'different-content'\"] = response.status === 'different-content';",
+									"tests[\"Diff contains differences\"] = response.differences.length === 1;",
+									"tests[\"Difference has the correct offset\"] = response.differences[0].offset === 40;",
+									"tests[\"Difference has the correct length\"] = response.differences[0].length === 3;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/301001",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Retrieves the diff and checks that it indicates \"different-content\" and contains the correct offsets."
+					},
+					"response": []
+				},
+				{
+					"name": "SetLeft same content",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Response body indicates success\"] = JSON.parse(responseBody).success;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/701001/left",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"data\": \"Rm9vIGJhcg==\"\n}"
+						},
+						"description": "Sets the left part of a diff to the string: \"Foo bar\"."
+					},
+					"response": []
+				},
+				{
+					"name": "SetRight same content",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Response body indicates success\"] = JSON.parse(responseBody).success;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/701001/right",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"data\": \"Rm9vIGJhcg==\"\n}"
+						},
+						"description": "Sets the right part of a diff to the string: \"Foo bar\"."
+					},
+					"response": []
+				},
+				{
+					"name": "Get diff with same content",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"response = JSON.parse(responseBody);",
+									"tests[\"Status code is 200 OK\"] = responseCode.code === 200;",
+									"tests[\"Content is JSON\"] = postman.getResponseHeader(\"Content-Type\") === 'application/json; charset=utf-8';",
+									"tests[\"Diff status is 'same-content'\"] = response.status === 'same-content';",
+									"tests[\"Diff contains no differences\"] = response.differences.length === 0;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://localhost:5000/v1/diff/701001",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Retrieves the diff and checks that it indicates \"same-content\" and contains no differences."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -52,6 +52,18 @@ The original description of the assignment can be found at [doc/assignment.md](d
     ./run
     ```
 
+## Usage
+
+If you point your browser to the API root (`http://localhost:5000/`), you'll get some [usage examples](doc/examples.md).
+
+This application is implemented as a REST service. In order to interact with it you need something like [Postman](https://www.getpostman.com/).
+
+This repository includes a [comprehensive Postman test script](doc/Base64Diff.postman_collection.json). It's also [documented online](https://documenter.getpostman.com/collection/view/2689411-1dc29b94-1594-a129-93f8-acbec7af00e4).
+
+If you have Postman installed and the service is running at your local machine's port 5000 right now, you can just click the button below to run it:
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/9597ce812faf7231e029)
+
 ## Assumptions
 
 ### Specification
