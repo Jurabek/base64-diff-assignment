@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Base64Diff.Api
 {
+    using Domain.Services;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -17,6 +19,7 @@ namespace Base64Diff.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IDiffStore>(new InMemoryDiffStore());
             services.AddMvc();
         }
 
