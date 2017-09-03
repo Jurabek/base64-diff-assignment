@@ -99,36 +99,8 @@ Content-Type: application/json; charset=utf-8
 {"success":true}
 ```
 
-**A note about JSON-Base64**
+### A note about JSON-Base64
 
 There is a (relatively unknown) standards-based file format named [JSON-Base64](https://jb64.org//) which allows encoding of tabular data like CSVs or spreadsheets. In this format the first row defines headers with column names and data types and the remaining of the file contains the actual data, one record per row. All the data is represented as JSON that is encoded via a slightly modified version of Base64. The format is stream-frendly and in public domain.
-
-A `sample.jb64` file looks like this:
-
-```
-W1siSUQiLCJpbnRlZ2VyIl0sWyJuYW1lIiwic3RyaW5nIl1d.d72a7e34d0a477ec0063bc8e8f3a094e
-WzEsIkJvYiJd.cdac9777ff0b77ac706855fb61a7b480
-WzIsIlN1emllIl0.afb2999052f5924c038d7b503226ef1e
-WzMsIkNhcm9sIl0.345841e617e98a1c12f554acc507bbbc
-WzQsIkpvaG4iXQ.02c185032333e52a10959c98ed9fc5f1
-WzUsIkJvbm5pZSJd.f331c74c364699a5293a6e1229938dd8
-WzYsIlwiQ29vbCdlJ29oaGhoXFxcIiwiXQ.d2db968574ec7e29f6c8cd0f1491d39f
-WzcsIlJlZ2luYWxkIGlzIGJhbGQiXQ.8162f9f07c93d252e9bdeb1b54c22938
-WzgsIkhlbnJ5Il0.65701dd0cb9a924642629add95dabd47
-```
-
-The above is the encoded version of this `sample.csv` file below:
-
-```
-ID,name
-1,Bob
-2,Suzie
-3,Carol
-4,John
-5,"   Bonnie"
-6,"""Cool'e'ohhhh\"","
-7,"Reginald is bald"
-"8",Henry
-```
 
 For this exercise I am assuming that this is **not** what the assignment's description meant. If we were supporting this format then the data would need to be posted to the endpoints as a raw string instead.
