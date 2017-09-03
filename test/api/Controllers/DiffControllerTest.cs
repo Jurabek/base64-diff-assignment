@@ -19,16 +19,18 @@ namespace Base64Diff.Api.Controllers
         DiffController Controller;
 
         /// <summary>
-        /// Helper to assert a JsonResult response and return its string representation for further tests.
+        /// Helper to assert a JSON success response and return its string representation for further tests.
         /// </summary>
         string AssertJsonResponse(Func<IActionResult> action)
         {
             var result = action();
             Assert.IsInstanceOf<JsonResult>(result);
-            var jsonResult = (JsonResult)result;
-            return JsonConvert.SerializeObject(jsonResult.Value);
+            return JsonConvert.SerializeObject((result as JsonResult).Value);
         }
 
+        /// <summary>
+        /// Helper to assert a JSON error response and return its string representation for further tests.
+        /// </summary>
         string AssertUnprocessableEntityResponse(Func<IActionResult> action)
         {
             var result = action();
