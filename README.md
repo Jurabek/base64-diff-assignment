@@ -15,7 +15,7 @@ The original description of the assignment can be found at [doc/assignment.md](d
 2. Clone this repository.
 
     ```bash
-    git clone https://github.com:potz/base64-diff-assignment.git
+    git clone https://github.com/potz/base64-diff-assignment.git
     ```
 
 3. Run the installation script.
@@ -98,6 +98,32 @@ Content-Type: application/json; charset=utf-8
 
 {"success":true}
 ```
+
+### Implementation Details
+
+* **Application design**
+
+    This is a .NET MVC Core application, with a web-facing API layer (`src/api`) that uses a service layer (`src/domain`) to retrieve and store its diffs. Dependency injection was used to provide the single controller with a diffing store.
+
+* **Database**
+
+    We're not using a database. All the data is kept in memory. This is not scalable of course but works well for prototyping. Also note that since we used a service layer we can add a database later without changing the interface.
+
+* **Tests**
+
+    We have 100% code coverage for production code, which is a nice start but it's not to be taken as a guarantee that all the edge cases are being covered.
+
+    We are unit testing the controllers in isolation, so mocks were used. Although it's generally considered good practice, we might question the cost of maintaining unit tests for controllers when we are already exercising all the routes on our integration tests.
+
+### Possible Improvements
+
+* **Diffing algorithm**
+
+    I understand the focus of this exercise is application design and good documentation, so the most simple and naive diffing algorithm was chosen. We consider only differences in data with the exact same lengths.
+
+    This means for example that for the strings: `"The quick brown fox jumps over the lazy fox"` and `"The lazy brown fox jumps over the quick dog"` we find only one difference, from character 4 and with length 35 (start of the word `lazy` all the way to the end of the word `quick`). A proper diffing algorithm should be able to recognize two differences in these sentences (the actual words `lazy` and `quick`).
+
+    In a real world situation we should probably use the widely-adopted [O(ND) Difference Algorithm](http://www.xmailserver.org/diff2.pdf) by Eugene Myers instead.
 
 ### A note about JSON-Base64
 
