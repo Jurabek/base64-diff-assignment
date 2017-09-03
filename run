@@ -1,0 +1,2 @@
+#!/bin/bash
+cd src/api && ASPNETCORE_ENVIRONMENT=Development dotnet run

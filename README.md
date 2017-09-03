@@ -8,6 +8,50 @@ This is a coding test assignment for [WAES](https://www.wearewaes.com/).
 
 The original description of the assignment can be found at [doc/assignment.md](doc/assignment.md).
 
+## Installation
+
+1. Make sure you have installed [.NET Core](https://www.microsoft.com/net/core) (version >= 2.0.0) for your platform.
+
+2. Clone this repository.
+
+    ```bash
+    git clone https://github.com:potz/base64-diff-assignment.git
+    ```
+
+3. Run the installation script.
+
+    This will restore NuGet packages, build the project and run the tests.
+
+    **On Windows:**
+
+    ```cmd
+    CD base64-diff-assignment
+    install.bat
+    ```
+
+    **On Linux/Mac:**
+
+    ```bash
+    cd base64-diff-assignment
+    ./install
+    ```
+
+4. Launch the server.
+
+    This starts the server and listens on `http://localhost:5000`.
+
+    **On Windows:**
+
+    ```cmd
+    run.bat
+    ```
+
+    **On Linux/Mac:**
+
+    ```bash
+    ./run
+    ```
+
 ## Assumptions
 
 ### Specification

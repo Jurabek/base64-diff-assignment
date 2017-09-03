@@ -20,7 +20,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotfiles", "dotfiles", "{97
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		doc\assignment.md = doc\assignment.md
+		install.bat = install.bat
 		README.md = README.md
+		run.bat = run.bat
 	EndProjectSection
 EndProject
 Global

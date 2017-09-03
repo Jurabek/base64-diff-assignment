@@ -1,0 +1,25 @@
+#!/bin/bash
+dotnet --info > /dev/null 2>&1
+if [ $? -eq 1 ]; then
+	echo This program requires .NET Core
+	echo Please find installation files at https://www.microsoft.com/net/core
+	exit 1
+fi
+
+echo
+echo Restoring NuGet packages...
+dotnet restore  || exit 1
+
+echo
+echo Building solution...
+dotnet build Base64Diff.sln --configuration Release || exit 1
+
+echo
+echo Running tests...
+dotnet vstest \
+	test/domain/bin/Release/netcoreapp2.0/Base64Diff.DomainTests.dll \
+	test/api/bin/Release/netcoreapp2.0/Base64Diff.ApiTests.dll \
+	test/integration/bin/Release/netcoreapp2.0/Base64Diff.IntegrationTests.dll  || exit 1
+
+echo
+echo Installation was successful. All tests passed.
