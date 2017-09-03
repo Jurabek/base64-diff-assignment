@@ -35,12 +35,19 @@ namespace Base64Diff.Domain
         public IReadOnlyList<Difference> Differences => _differences;
 
         /// <summary>
-        /// Private constructor, creates an immutable Diff from scratch.
+        /// Initializes a new instance of the <see cref="Diff" /> class with the specified left and right parts.
         /// </summary>
         /// <param name="left">The <see cref="Left" /> part of the diff</param>
         /// <param name="right">The <see cref="Right" /> part of the diff</param>
-        private Diff(byte[] left, byte[] right)
+        /// <exception cref="ArgumentNullException"><paramref name="left"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="right"/> is null.</exception>
+        /// </exception>
+        public Diff(byte[] left, byte[] right)
         {
+            if (left == null)
+                throw new ArgumentNullException(nameof(left));
+            if (right == null)
+                throw new ArgumentNullException(nameof(right));
             _left = (byte[])left.Clone();   // Avoid mutations
             _right = (byte[])right.Clone(); // Avoid mutations
             (_status, _differences) = ExtractDifferences(_left, _right);
@@ -74,67 +81,6 @@ namespace Base64Diff.Domain
                 differences.Add(new Difference(lastDifference, left.Length - lastDifference));
             var status = differences.Count == 0 ? DiffStatus.SameContent : DiffStatus.DifferentContent;
             return (status, differences);
-        }
-
-        /// <summary>
-        /// Internal in-memory database.
-        /// </summary>
-        static readonly Dictionary<int, Diff> Database = new Dictionary<int, Diff>();
-
-        /// <summary>
-        /// Finds a <see cref="Diff" /> by its ID.
-        /// </summary>
-        /// <param name="id">The ID of the Diff</param>
-        /// <returns>
-        /// The <see cref="Diff"/> instance for that ID, or <b>null</b> if not found.
-        /// </returns>
-        public static Diff Find(int id)
-        {
-            return Database.TryGetValue(id, out Diff diff) ? diff : null;
-        }
-
-        /// <summary>
-        /// Sets the <see cref="Left"/> part of a diff.
-        /// </summary>
-        /// <param name="id">The ID of the diff</param>
-        /// <param name="data">A Base64-encoded string containing the left part of the diff</param>
-        /// <exception cref="ArgumentNullException"><paramref name="data"/> is null.</exception>
-        /// <exception cref="FormatException"><paramref name="data"/> is not a valid Base64 string.</exception>
-        /// <returns>The new <see cref="Diff"/> instance.</returns>
-        public static Diff SetLeft(int id, string data)
-        {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
-            var left = Convert.FromBase64String(data);
-            if (!Database.TryGetValue(id, out Diff diff))
-            {
-                diff = new Diff(left, new byte[0]);
-                Database.Add(id, diff);
-                return diff;
-            }
-            return Database[id] = new Diff(left, diff.Right);
-        }
-
-        /// <summary>
-        /// Sets the <see cref="Right"/> part of a diff.
-        /// </summary>
-        /// <param name="id">The ID of the diff</param>
-        /// <param name="data">A Base64-encoded string containing the left part of the diff</param>
-        /// <exception cref="ArgumentNullException"><paramref name="data"/> is null.</exception>
-        /// <exception cref="FormatException"><paramref name="data"/> is not a valid Base64 string.</exception>
-        /// <returns>The new <see cref="Diff"/> instance.</returns>
-        public static Diff SetRight(int id, string data)
-        {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
-            var right = Convert.FromBase64String(data);
-            if (!Database.TryGetValue(id, out Diff diff))
-            {
-                diff = new Diff(new byte[0], right);
-                Database.Add(id, diff);
-                return diff;
-            }
-            return Database[id] = new Diff(diff.Left, right);
         }
     }
 }
